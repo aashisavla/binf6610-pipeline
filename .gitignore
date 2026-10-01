@@ -1,0 +1,7 @@
+results/
+*.bam
+*.bai
+*.fastq.gz
+*.vcf.gz
+*.tbi
+.DS_Store
