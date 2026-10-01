@@ -1,0 +1,41 @@
+{
+  "pipeline": {
+    "name": "variant-call",
+    "version": "1.0.0",
+    "implementation": "bash",
+    "git_sha": "b6f1899f20d524986d9a933ffdd911421a84eba5",
+    "run_id": "2026-10-01T01:10:59Z-b6f1899",
+    "started_at": "2026-10-01T01:10:59Z",
+    "finished_at": "2026-10-01T01:12:19Z",
+    "exit_status": "success"
+  },
+  "platform": {
+    "kind": "laptop",
+    "region": "smoke_1mb",
+    "host": "Aashis-MacBook-Pro.local",
+    "slurm_job_id": "none",
+    "slurm_cpus": "none",
+    "container": "none"
+  },
+  "reference": {"genome": "/Users/aashisavla/smoke/smoke.fa"},
+  "samples": [
+    {"sample_id": "smoke_01", "library_type": "paired", "condition": "unaffected"},
+    {"sample_id": "smoke_02", "library_type": "paired", "condition": "affected"},
+    {"sample_id": "smoke_03", "library_type": "single", "condition": "affected"}
+  ],
+  "outputs": [
+    {"stage": "analyze", "type": "vcf", "path": "cohort.filtered.vcf.gz", "checksum": "sha256:f0a4fc53e794ec17943fe9d7ccc55e09e45d5a5fe0bbdbc6cbd43427dfef68de"},
+    {"stage": "analyze", "type": "vcf_index", "path": "cohort.filtered.vcf.gz.tbi", "checksum": "sha256:2b38af00b66cdc43ea90788accaa62f5085136a9ad8a7bbc8e2af9b75464cf41"},
+    {"stage": "qc_report", "type": "multiqc", "path": "multiqc_report.html", "checksum": "sha256:a2e9454188d3ea18fc25c0c17723a545fc0e1f43ac42088ac1b3c34f8491b166"}
+  ],
+  "metrics": [],
+  "tools": {
+    "bwa": "0.7.19-r1273",
+    "samtools": "1.24",
+    "bcftools": "1.24",
+    "gatk": "4.6.2.0",
+    "fastqc": "0.12.1",
+    "fastp": "1.3.7",
+    "multiqc": "1.35"
+  }
+}
