@@ -1,39 +1,96 @@
 # TROUBLESHOOTING
 
-## Week 2 — four failures caused on purpose
+## Week 2: four failures caused on purpose, and one that wasn't
 
-Every test run uses its own TAG, so it writes to `/scratch/$USER/w2-run-<TAG>` and never touches the real run.
+Each test run was submitted with its own `TAG`, so it wrote to `/scratch/$USER/w2-run-<TAG>` and never touched the real run (array 10763575, cohort 10763583).
 
 ### 1 · `--time=00:02:00`
-`TAG=timeout PERSAMPLE_TIME=00:02:00 ARRAY=1 NO_COHORT=1 bash slurm/submit.sh`
-```
-<sacct line: State TIMEOUT>
-```
-<Where the log stopped (last `=== stage N` line in logs/persample_<id>_1.out), and what was left on disk in /scratch/$USER/w2-run-timeout/ (`ls -la` of the stage folder it was in). /tmp/<jobid> removed by the trap?>
 
-### 2 · One task exits 1, cohort job on afterok
-`TAG=fail3 ARRAY=2-3 bash slurm/submit.sh` — task 3 exits 1 by design (the job name ends in `-fail3`).
+Submitted with `TAG=timeout PERSAMPLE_TIME=00:02:00 ARRAY=1 NO_COHORT=1 bash slurm/submit.sh`.
+
 ```
-<sacct lines: task 2 COMPLETED, task 3 FAILED 1:0, cohort CANCELLED>
-<squeue/sacct Reason for the cohort: Dependency / DependencyNeverSatisfied>
+10763635_1     w2-persample-timeout    TIMEOUT   00:02:11          8      0:0
+[14:02:04] === stage 3: align ===
+[14:02:04] align: 'NA12878' with 8 threads
+slurmstepd: error: *** JOB 10763635 ON c0662 CANCELLED AT 2026-10-02T14:02:37 DUE TO TIME LIMIT ***
 ```
-<What happened to the cohort job, and why afterany would instead have genotyped a partial cohort.>
+
+**Where it stopped.** It was killed 33 s into stage 3, while BWA was still loading the index.
+
+**What was left on disk.**
+- `02_trim/` was complete: both trimmed FASTQs (87,230,844 and 91,236,895 bytes) and the fastp reports.
+- `03_align/` held only `NA12878.bwa.log`.
+- No partial BAM reached `/scratch`, because `samtools sort` writes its temporary files to `-T ${TMPDIR}` (`/tmp/<jobid>` on the node), which the EXIT trap removes.
+
+**State.** `TIMEOUT`, Elapsed 2:11 (the limit plus Slurm's kill grace period).
+
+### 2 · One task exits 1, cohort job on `afterok`
+
+Submitted with `TAG=fail3 ARRAY=2-3 bash slurm/submit.sh`. Task 3 exits 1 before running anything, because its job name ends in `-fail3`.
+
+```
+JobID                       JobName      State ExitCode               Start                 End      Reason
+10763637            w2-cohort-fail3  CANCELLED      0:0                None 2026-10-02T14:09:19  Dependency
+10763636_2       w2-persample-fail3  COMPLETED      0:0 2026-10-02T14:00:27 2026-10-02T14:09:07        None
+10763636_3       w2-persample-fail3     FAILED      1:0 2026-10-02T14:00:27 2026-10-02T14:00:52        None
+task 3 (NA12892): deliberate failure (w2-persample-fail3)
+```
+
+**What happened to the cohort job.** It never started: it was `CANCELLED` with `Reason=Dependency`.
+
+**When.** Not seconds after task 3 failed (14:00:52), but 12 s after the *last* task ended (task 2, 14:09:07). It stayed PENDING (Dependency) while task 2 was still running. Slurm evaluates `afterok` on an array once every task has finished; only then is the dependency known to be unsatisfiable, and `--kill-on-invalid-dep=yes` cancels it.
+
+**Why not `afterany`.** With `afterany`, the cohort job would have started at 14:09 on one GVCF instead of two. Stage 6 would stop it here, because `merge` calls `need_file` on every sample's GVCF before genotyping. But that is a second line of defence, not the barrier.
 
 ### 3 · `--array` past the end of the samplesheet
-`TAG=range ARRAY=8-9 NO_COHORT=1 bash slurm/submit.sh`
+
+Submitted with `TAG=range ARRAY=8-9 NO_COHORT=1 bash slurm/submit.sh`. I used 8–9 instead of 1–9 so as not to rerun seven samples for nothing; task 9 is the same either way.
+
 ```
-<sacct lines: task 8 COMPLETED, task 9 FAILED 64:0>
-<log line: task 9: no row 9 in …samplesheet-variant8.csv>
+10763638_8       w2-persample-range  COMPLETED   00:09:05          8      0:0
+10763638_9       w2-persample-range     FAILED   00:00:13          8     64:0
+task 9: no row 9 in /courses/BINF6610.202710/data/samplesheet-variant8.csv
 ```
-<Without the guard, SAMPLE would be empty; run_sample.sh also refuses an empty sample_id, but a pipeline that filtered rows by an empty name would select none (or all) and still exit 0 — more COMPLETED tasks than results.>
+
+**What task 9 did.** Its awk lookup returned an empty `SAMPLE`, and the guard in `01_persample.sbatch` exited 64 within 13 s, before the environment was even loaded.
+
+**Without the guard.** `run_sample.sh` also refuses an empty `sample_id`. If both checks were missing, the pipeline itself would treat `ONLY_SAMPLE=""` as "no filter" (that is how `run_pipeline.sh` runs every sample). Task 9 would then process all eight samples, racing tasks 1–8 on the same output files, and still exit 0. That gives nine COMPLETED tasks for eight results, with possibly corrupted BAMs.
 
 ### 4 · `scancel` mid-write, then resubmit
-`TAG=cancel ARRAY=1 NO_COHORT=1 bash slurm/submit.sh`, `scancel <id>` once the log reaches stage 3, then the same command again.
+
+Submitted with `TAG=cancel ARRAY=1 NO_COHORT=1 bash slurm/submit.sh`, then `scancel` once the log reached stage 3, then the same command again.
+
 ```
-<sacct: first CANCELLED, second COMPLETED>
-<ls -la of 03_align/ after the cancel: partial/odd-sized .sorted.bam>
+10763641_1      w2-persample-cancel CANCELLED+   00:02:03      0:0
+10763641_1.+                  batch  CANCELLED   00:02:04     0:15
+slurmstepd: error: *** JOB 10763641 ON c0666 CANCELLED AT 2026-10-02T14:02:32 ***
+10763685_1      w2-persample-cancel  COMPLETED   00:07:30          8      0:0     (resubmission)
 ```
-<Did the rerun trust what was left? This pipeline has no skip-if-exists: every stage rewrites its outputs, so the rerun redid stages 0–5 and overwrote the partial BAM (check timestamps/sizes). Say what you saw.>
+
+**Not quite mid-write.** The cancel landed 44 s into stage 3, when BWA had barely finished loading its index. `03_align/` held only `NA12878.bwa.log`, with no partial BAM, for the same reason as in #1: sort temp files live in `${TMPDIR}`. `02_trim/` was complete, stamped 14:01:48.
+
+**Did the rerun trust what was left?** No.
+- After the rerun, every file in `02_trim/` is stamped 14:05:16, so stage 2 ran again. The sizes are identical, so fastp is deterministic here.
+- `03_align/NA12878.sorted.bam` (105,849,839 bytes) appeared at 14:06:37.
+- The pipeline has no skip-if-exists: every stage rewrites its outputs from its inputs.
+- That costs ~3.5 min of repeated trimming, but it is the safe choice. A skip would have to trust a file that `need_file` only checks for being non-empty, and a cancel can leave a truncated file that is non-empty.
+
+### 5 · Not on purpose: every task failed in stage 1 (FastQC `-d`)
+
+```
+10763534_1             w2-persample     FAILED   00:00:53      1:0      (all 8 tasks FAILED 1:0)
+10763542                  w2-cohort  CANCELLED   00:00:00      0:0
+Failed to process /tmp/10763535
+java.io.FileNotFoundException: /tmp/10763535 (Is a directory)
+```
+
+**Symptom.** All eight tasks of the first submission failed within a minute, and the cohort job was cancelled by `afterok`.
+
+**How it was found.** The log's last stage line was `=== stage 1: qc_raw ===`. Grepping for `exception` showed FastQC trying to open `/tmp/10763535`, the job's own `${TMPDIR}`, as an input file.
+
+**Cause.** I had added `-d "$TMP_ROOT"` to send FastQC's temp files to `${TMPDIR}`. The FastQC on Explorer did not take `-d` as an option with a value, so the path became an input. FastQC exited non-zero, and `set -e` stopped the task.
+
+**Fix.** Removed `-d` (commit `0e4a9a0`; FastQC needs negligible temp space), then resubmitted as 10763575. All eight tasks completed.
 
 ---
 

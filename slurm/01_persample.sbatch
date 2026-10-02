@@ -4,9 +4,9 @@
 #SBATCH --job-name=w2-persample
 #SBATCH --partition=courses
 #SBATCH --account=binf6610.202710
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=16G
-#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=10G
+#SBATCH --time=00:30:00
 #SBATCH --export=NONE
 #SBATCH --output=logs/persample_%A_%a.out
 set -euo pipefail
