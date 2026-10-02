@@ -67,12 +67,24 @@ Memory Utilized: 6.51 GB   Memory Utilized: 6.65 GB   Memory Utilized: 6.79 GB
 | | --cpus-per-task | --mem | --time |
 |---|---|---|---|
 | first request | 4 | 16G | 02:00:00 |
-| measured (10763583) | <CPU efficiency> → <cores busy> | memory.peak <x GB> · seff <x GB> | <Elapsed> |
-| **set to** | <…> | <…> | <…> |
+| measured (10763583) | CPU efficiency 25.6 % → 1.02 cores busy | memory.peak 1.32 GB · seff 1.22 GB | 9:19 |
+| **set to** | **2** | **6G** | **00:30:00** |
 
 ```
-<paste: seff 10763583>
-<paste: memory.peak line from logs/cohort_10763583.out>
+$ sacct -X -j 10763583 -o JobID,State,Elapsed,ExitCode
+10763583      COMPLETED   00:09:19      0:0
+
+$ seff 10763583
+CPU Utilized: 00:09:32
+CPU Efficiency: 25.58% of 00:37:16 core-walltime
+Job Wall-clock time: 00:09:19
+Memory Utilized: 1.22 GB
+
+memory.peak bytes: 1316282368
 ```
 
-**Why.** <CombineGVCFs and GenotypeGVCFs are single-threaded, so cores busy should be ≈1: drop to 2 if seff confirms it. Set --mem to the peak plus ~25 %, and --time to ~2–3× the elapsed time.>
+**Cores.** The job kept 1.02 cores busy out of 4. CombineGVCFs, GenotypeGVCFs, VariantFiltration and MergeVcfs are all single-threaded, so three of the four cores did nothing. 2 leaves one core for the JVM's garbage-collector threads and for gzip; a measured run at 1 core would settle whether even that is needed.
+
+**Memory.** The peak was 1.32 GB. But GATK runs with `-Xmx4g` (`JAVA_MEM` in `lib/common.sh`), so the heap is *allowed* to grow to 4 GB, plus JVM overhead. `--mem` has to cover what the JVM may take, not only what it took on this cohort, so 6G. Lowering both `JAVA_MEM` and `--mem` would need a run that proves the smaller heap is enough.
+
+**Time.** 9:19 elapsed, so 00:30:00 is ~3× that. It replaces the 2 h guess, which would have held a node for 1 h 50 min if a step had hung.
