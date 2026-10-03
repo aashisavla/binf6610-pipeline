@@ -7,6 +7,7 @@
 #   TAG=x          name the jobs w2-persample-x / w2-cohort-x; they write to /scratch/$USER/w2-run-x
 #   ARRAY=1-3      which samplesheet rows to run (default: every row)
 #   NO_COHORT=1    submit the array only
+#   AFTER=<jobid>  start the array only after that job succeeds (e.g. the image pull)
 #   PERSAMPLE_CPUS / PERSAMPLE_MEM / PERSAMPLE_TIME / COHORT_*   override conf/slurm.env
 set -euo pipefail
 
@@ -20,7 +21,7 @@ TAG=${TAG:-}
 SUFFIX=${TAG:+-${TAG}}
 
 ARRAY_ID=$(sbatch --parsable -p "${PARTITION}" -A "${ACCOUNT}" \
-    --job-name="w2-persample${SUFFIX}" --array="${ARRAY}" \
+    --job-name="w2-persample${SUFFIX}" --array="${ARRAY}" ${AFTER:+--dependency=afterok:${AFTER}} \
     --cpus-per-task="${PERSAMPLE_CPUS}" --mem="${PERSAMPLE_MEM}" --time="${PERSAMPLE_TIME}" \
     01_persample.sbatch)
 ARRAY_ID=${ARRAY_ID%%;*}
