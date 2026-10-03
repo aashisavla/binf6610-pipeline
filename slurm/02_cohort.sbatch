@@ -18,7 +18,7 @@ mkdir -p "${TMPDIR}"
 trap 'rm -rf "${TMPDIR}"' EXIT
 
 set +u                                   # conda's activate scripts read unset variables
-module load "${CONDA_MODULE}"
+module load miniconda3/25.9.1
 source activate "${CONDA_ENV}"
 set -u
 

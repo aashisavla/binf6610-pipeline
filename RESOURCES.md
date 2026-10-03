@@ -48,12 +48,28 @@ memory.peak bytes, tasks 1–8:
 | 8 | 10763634_1 | 8:30 | 23:01 | 2.71 | 34 % | 7.51 GB |
 
 ```
-$ seff 10763623_1          $ seff 10763625_1          $ seff 10763634_1
-Cores per node: 2          Cores per node: 4          Cores per node: 8
-CPU Utilized: 00:20:06     CPU Utilized: 00:19:45     CPU Utilized: 00:23:01
-CPU Efficiency: 74.44%     CPU Efficiency: 55.37%     CPU Efficiency: 33.85%
-Wall-clock: 00:13:30       Wall-clock: 00:08:55       Wall-clock: 00:08:30
-Memory Utilized: 6.51 GB   Memory Utilized: 6.65 GB   Memory Utilized: 6.79 GB
+$ seff 10763623_1
+Cores per node: 2
+CPU Utilized: 00:20:06
+CPU Efficiency: 74.44% of 00:27:00 core-walltime
+Job Wall-clock time: 00:13:30
+Memory Utilized: 6.51 GB
+
+$ seff 10763625_1
+Cores per node: 4
+CPU Utilized: 00:19:45
+CPU Efficiency: 55.37% of 00:35:40 core-walltime
+Job Wall-clock time: 00:08:55
+Memory Utilized: 6.65 GB
+
+$ seff 10763634_1
+Cores per node: 8
+CPU Utilized: 00:23:01
+CPU Efficiency: 33.85% of 01:08:00 core-walltime
+Job Wall-clock time: 00:08:30
+Memory Utilized: 6.79 GB
+
+memory.peak bytes: 7047094272 (2 cores)   7256784896 (4 cores)   7513772032 (8 cores)
 ```
 
 **Decision: 4 cores.**
