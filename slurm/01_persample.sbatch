@@ -1,6 +1,7 @@
 #!/bin/bash -l
 # 01_persample.sbatch — stages 0–5 for ONE sample, as one task of the array.
 # Task N runs row N of the samplesheet. Submit with submit.sh, from slurm/.
+# The software comes from the image at ${SIF} (slurm/pull.sbatch), not from conda.
 #SBATCH --job-name=w2-persample
 #SBATCH --partition=courses
 #SBATCH --account=binf6610.202710
@@ -21,20 +22,19 @@ if [[ ${SLURM_JOB_NAME} == *-fail"${SLURM_ARRAY_TASK_ID}" ]]; then
     echo "task ${SLURM_ARRAY_TASK_ID} (${SAMPLE}): deliberate failure (${SLURM_JOB_NAME})" >&2
     exit 1
 fi
+[[ -s "${SIF}" ]] || { echo "no image at ${SIF}: run sbatch pull.sbatch first" >&2; exit 66; }
 
 export THREADS="${SLURM_CPUS_PER_TASK}"
 export TMPDIR="/tmp/${SLURM_JOB_ID}"
 mkdir -p "${TMPDIR}"
 trap 'rm -rf "${TMPDIR}"' EXIT
 
-set +u                                   # conda's activate scripts read unset variables
-module load miniconda3/25.9.1
-source activate "${CONDA_ENV}"
-set -u
-
-echo "task ${SLURM_ARRAY_TASK_ID}: sample '${SAMPLE}' on $(hostname), ${THREADS} cpus, run dir ${RUN_ROOT}" >&2
-bash "${PIPELINE_DIR}/run_sample.sh" "${SAMPLESHEET}" "${RUN_ROOT}" "${SAMPLE}"
-
-# Exact peak memory of this job (MaxRSS is sampled every 30 s and can miss it).
-CG=/sys/fs/cgroup$(awk -F: '/^0::/{print $3}' /proc/self/cgroup)
-echo "memory.peak bytes: $(cat "$CG/memory.peak" 2>/dev/null || echo unavailable)" >&2
+echo "task ${SLURM_ARRAY_TASK_ID}: sample '${SAMPLE}' on $(hostname), ${THREADS} cpus, run dir ${RUN_ROOT}, image ${SIF}" >&2
+apptainer exec --cleanenv \
+    --env THREADS="${THREADS}" \
+    --env TMPDIR="${TMPDIR}" \
+    --env SLURM_JOB_ID="${SLURM_JOB_ID}" \
+    --env SLURM_CPUS_PER_TASK="${SLURM_CPUS_PER_TASK}" \
+    --bind /courses/BINF6610.202710,/scratch/${USER} \
+    "${SIF}" \
+    bash "${PIPELINE_DIR}/run_sample.sh" "${SAMPLESHEET}" "${RUN_ROOT}" "${SAMPLE}"
