@@ -1,0 +1,46 @@
+task_id	name	status	exit	container	native_id	realtime	%cpu	peak_rss
+1	VALIDATE	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-coreutils_gawk_gzip-7c58ccc2f9ca6bcc.img	10929665	1m 23s	95.4%	13.1 MB
+4	FASTP (NA12878)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929691	50.4s	110.1%	1.3 GB
+3	FASTQC (NA12891)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929706	29s	88.3%	554 MB
+2	FASTQC (NA12878)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929708	32s	91.6%	612 MB
+7	FASTP (NA12892)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929692	29.5s	101.6%	1.3 GB
+9	FASTQC (NA07357)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929712	27s	90.0%	565.7 MB
+6	FASTQC (NA12892)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929709	19s	88.1%	421.1 MB
+5	FASTP (NA12891)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929690	44.2s	146.2%	1.3 GB
+12	BWA_MEM (NA12892)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929726	1m 52s	261.1%	6.4 GB
+10	FASTQC (NA12003)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929716	37s	38.2%	455 MB
+11	FASTP (NA07357)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929694	49.3s	135.6%	219 MB
+14	FASTP (NA12003)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929696	19.8s	140.8%	222.3 MB
+15	BWA_MEM (NA12891)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929725	2m 55s	421.0%	6.8 GB
+17	MARKDUPLICATES (NA12892)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929760	14.9s	142.8%	2.7 GB
+20	MARKDUPLICATES (NA12891)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929768	48.5s	95.2%	3.1 GB
+13	FASTQC (NA10851)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929713	27s	91.9%	576.8 MB
+16	FASTP (NA10851)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929698	43.7s	146.8%	1.3 GB
+8	BWA_MEM (NA12878)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929731	1m 44s	742.3%	6.8 GB
+18	BWA_MEM (NA07357)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929727	1m 17s	741.4%	6.8 GB
+19	FASTQC (NA12813)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929721	1m 5s	57.1%	598.3 MB
+22	FASTQC (NA12873)	CACHED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10929723	34s	91.5%	613.4 MB
+24	FASTP (NA12873)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929702	49.3s	148.1%	1.3 GB
+23	FASTP (NA12813)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10929700	50.2s	167.2%	1.3 GB
+25	MARKDUPLICATES (NA12878)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929764	25.1s	144.2%	3.3 GB
+28	BWA_MEM (NA10851)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929729	1m 23s	751.0%	6.8 GB
+29	BWA_MEM (NA12003)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929724	56.9s	682.5%	6.4 GB
+26	MARKDUPLICATES (NA07357)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929762	23.5s	144.3%	3.2 GB
+34	MARKDUPLICATES (NA12003)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929759	16.4s	142.3%	2.7 GB
+32	MARKDUPLICATES (NA10851)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929763	25.4s	144.2%	3.3 GB
+33	BWA_MEM (NA12813)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929730	2m 37s	750.2%	7.5 GB
+30	BWA_MEM (NA12873)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10929734	1m 43s	758.9%	7.1 GB
+35	MARKDUPLICATES (NA12813)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929766	1m 6s	94.9%	3.6 GB
+38	MARKDUPLICATES (NA12873)	CACHED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929765	1m 1s	91.1%	3.3 GB
+39	MULTIQC	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/quay.io-biocontainers-multiqc-1.35--pyhdfd78af_2.img	10929878	10.2s	38.2%	219.2 MB
+37	HAPLOTYPECALLER (NA12003)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929854	3m 32s	213.7%	1.1 GB
+21	HAPLOTYPECALLER (NA12892)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929851	4m 6s	195.3%	1.4 GB
+36	HAPLOTYPECALLER (NA07357)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929853	4m 29s	201.6%	1.2 GB
+40	HAPLOTYPECALLER (NA10851)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929855	4m 41s	199.7%	1.1 GB
+27	HAPLOTYPECALLER (NA12891)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929850	5m 29s	195.7%	1.1 GB
+31	HAPLOTYPECALLER (NA12878)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929852	5m 37s	179.2%	1.1 GB
+42	HAPLOTYPECALLER (NA12873)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929857	5m 25s	192.2%	1.1 GB
+41	HAPLOTYPECALLER (NA12813)	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929856	6m 55s	183.3%	1 GB
+43	JOINT_GENOTYPE	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10929964	7m	106.1%	968.4 MB
+44	FILTER	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10930035	23.5s	165.7%	509.1 MB
+45	PUBLISH	COMPLETED	0	/scratch/savla.aas/nxf-apptainer/community.wave.seqera.io-library-coreutils_gawk_gzip-7c58ccc2f9ca6bcc.img	10930040	548ms	21.0%	1.3 MB
