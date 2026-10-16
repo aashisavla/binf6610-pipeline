@@ -3,19 +3,20 @@
 # validate_samplesheet.sh — stage 0: check the samplesheet, every FASTQ and the
 # reference before anything computes, and report every problem together.
 #
-#   validate_samplesheet.sh <samplesheet.csv> <reference.fa> <reference.dict>
+#   validate_samplesheet.sh <samplesheet.csv> <reference.fa> [<reference.dict>]
 #
-# Weeks 1-3's stage 0, moved into bin/ so that Nextflow can run it (bin/ is on
-# every task's PATH). Nextflow has linked every FASTQ the samplesheet names, and
-# the reference with its indexes, into this task's folder, so each one is opened
-# by its file name, $(basename ...), not by the path the samplesheet gives.
+# Weeks 1-3's stage 0, in bin/ so a rule can run it by its path. Snakemake links
+# nothing into a job's folder, so each FASTQ is opened at the path the samplesheet
+# gives: absolute, or relative to the samplesheet's own folder.
 # Columns are found by name in the header. Messages go to stderr; stdout stays empty.
 #=============================================================================
 set -euo pipefail
 
-SHEET=${1:?usage: validate_samplesheet.sh <samplesheet.csv> <reference.fa> <reference.dict>}
-REF=${2:?usage: validate_samplesheet.sh <samplesheet.csv> <reference.fa> <reference.dict>}
-DICT=${3:?usage: validate_samplesheet.sh <samplesheet.csv> <reference.fa> <reference.dict>}
+SHEET=${1:?usage: validate_samplesheet.sh <samplesheet.csv> <reference.fa> [<reference.dict>]}
+REF=${2:?usage: validate_samplesheet.sh <samplesheet.csv> <reference.fa> [<reference.dict>]}
+DICT=${3:-${REF%.*}.dict}                 # smoke.dict, not smoke.fa.dict
+SHEET_DIR=$(dirname "$SHEET")
+at_sheet() { case $1 in ""|/*) printf '%s' "$1" ;; *) printf '%s/%s' "$SHEET_DIR" "$1" ;; esac; }
 
 log() { printf '[validate] %s\n' "$*" >&2; }
 problems=()
@@ -39,8 +40,8 @@ while IFS=$'\x1f' read -r id lt r1 r2; do   # \x1f: not whitespace, so empty fie
     seen="$seen$id "
     log "checking sample '$id' ($lt)"
 
-    [[ -z $r1 ]] || r1=$(basename "$r1")
-    [[ -z $r2 ]] || r2=$(basename "$r2")
+    r1=$(at_sheet "$r1")
+    r2=$(at_sheet "$r2")
 
     case $lt in
         paired) [[ -n $r2 ]] || err "sample '$id': library_type is paired but r2_fastq is empty" ;;

@@ -12,3 +12,6 @@ work/
 .nextflow.log*
 results/
 nf-head-*.out
+.snakemake/
+logs/
+slurm/*.out
