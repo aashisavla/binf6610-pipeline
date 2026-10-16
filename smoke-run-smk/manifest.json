@@ -1,0 +1,40 @@
+{
+  "pipeline": {
+    "name": "variant-call",
+    "version": "1.0.0",
+    "implementation": "snakemake",
+    "revision": "none",
+    "git_sha": "none",
+    "run_id": "snakemake-20261016T180907",
+    "started_at": "2026-10-16T18:09:07.962314-04:00",
+    "launch_dir": "/Users/aashisavla/binf6610-pipeline",
+    "finished_at": "2026-10-16T22:10:34Z",
+    "exit_status": "success"
+  },
+  "params": {
+    "platform": "laptop",
+    "executor": "local",
+    "samplesheet": "/Users/aashisavla/smoke/samplesheet.csv",
+    "ref": "/Users/aashisavla/smoke/smoke.fa",
+    "region": "smoke_1mb",
+    "outdir": "results"
+  },
+  "platform": {
+    "kind": "laptop",
+    "executor": "local",
+    "engine": "snakemake 9.27.0",
+    "containers": {}
+  },
+  "samples": [
+    {"sample_id": "smoke_01", "library_type": "paired", "condition": "unaffected"},
+    {"sample_id": "smoke_02", "library_type": "paired", "condition": "affected"},
+    {"sample_id": "smoke_03", "library_type": "single", "condition": "affected"}
+  ],
+  "outputs": [
+    {"path": "cohort.filtered.vcf.gz", "checksum": "sha256:512c17f45f710fc3b5cc81b21deac9ca1582826172648e76fdc68e64aabc8a6b"},
+    {"path": "cohort.filtered.vcf.gz.tbi", "checksum": "sha256:b2d00438f2977ed60bab479e6de6d60ff89fcd12f2c318d290ea31c7e71e1b5c"},
+    {"path": "multiqc_report.html", "checksum": "sha256:f45dd415084a11bf88625fab60170da530df36022fbd2b54cb8ce28d11450600"},
+    {"path": "samples.tsv", "checksum": "sha256:d534edf8132cce4c541af0eea6cc345b17613e1b4a7a5286742aa8d16395257c"},
+    {"path": "variants.tsv", "checksum": "sha256:14cfb737dc80fde721268bbef82deddaf6e0d4e1ce41272b189c23cbae24a9fe"}
+  ]
+}
