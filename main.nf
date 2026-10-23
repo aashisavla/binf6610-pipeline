@@ -16,7 +16,7 @@ workflow {
     // The reference is a value: every sample's task reads the same files.
     ref       = file(params.ref)                                // the FASTA
     ref_index = files("${params.ref}.*")                        // its .fai and the BWA index
-    ref_dict  = file("${ref.parent}/${ref.baseName}.dict")      // GATK's sequence dictionary
+    ref_dict  = ref.resolveSibling("${ref.baseName}.dict")      // GATK's sequence dictionary; keeps s3:// paths whole
     sheet     = file(params.samplesheet)
 
     // One item per sample: [meta, reads], with meta = [id: ..., single_end: ...].
