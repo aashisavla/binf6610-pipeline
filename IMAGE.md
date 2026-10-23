@@ -22,3 +22,6 @@ which deletes the `.sif`). The rest of what a rerun needs is the code at the com
 the thread count). **Base image** and **Versions pinned** say what the image was built from; if
 the pushed image is ever deleted, they are the starting point for a rebuild that is close but not
 byte-identical.
+
+## The image in ECR
+<account>.dkr.ecr.us-east-2.amazonaws.com/variant-call@sha256:d3c7cdbf56ca58878fc2038d4785acbf21d18f8511b14eef6fce96803f272611
